@@ -1,0 +1,32 @@
+{
+    "name": "blog-api",
+    "version": "1.0.0",
+    "description": "",
+    "main": "server.js",
+    "scripts": {
+        "test": "export NODE_ENV='test' && nyc ./node_modules/.bin/mocha -t 5000 --exit"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/cdcasey/blog-api.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/cdcasey/blog-api/issues"
+    },
+    "homepage": "https://github.com/cdcasey/blog-api#readme",
+    "dependencies": {
+        "bcrypt": "^3.0.2",
+        "express": "^4.16.4",
+        "knex": "^0.15.2",
+        "pg": "^7.5.0"
+    },
+    "devDependencies": {
+        "chai": "^4.2.0",
+        "mocha": "^5.2.0",
+        "morgan": "^1.9.1",
+        "nyc": "^13.1.0",
+        "supertest": "^3.3.0"
+    }
+}
