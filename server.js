@@ -2,6 +2,7 @@ const express = require('express');
 const PORT = process.env.PORT || 8000;
 
 const server = express();
+const knex = require('./db/knex');
 
 server.use(function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -12,28 +13,13 @@ server.use(function(req, res, next) {
     next();
 });
 
-server.get('/posts', (req, res) => {
-    res.json([
-        { id: 289991, title: 'dddeee', categories: 'asdasd', content: 'aafh' },
-        {
-            id: 289989,
-            title: '4 poster',
-            categories: 'so mayny, categories',
-            content: 'Hello worls'
-        },
-        {
-            id: 289926,
-            title: 'Vue 2.0 Hello World',
-            categories: 'sdsadssad',
-            content: 'dasd'
-        },
-        {
-            id: 288695,
-            title: 'First Post',
-            categories: 'dumb',
-            content: 'This is a dumb post'
-        }
-    ]);
+server.get('/posts', (req, res, next) => {
+    const posts = knex('posts')
+        .orderBy('id')
+        .then((posts) => {
+            res.json(posts);
+        })
+        .catch(next);
 });
 
 server.use('/', (req, res) => {
