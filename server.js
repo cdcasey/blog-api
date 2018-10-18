@@ -40,6 +40,15 @@ server.use('/', (req, res) => {
     res.json({ message: 'hello world' });
 });
 
+server.use((req, res) => {
+    res.status(404).send('Not Found');
+});
+
+server.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Internal Server Error');
+});
+
 server.listen(PORT, () => {
     console.log(`Server running on ${PORT}`);
 });
