@@ -38,3 +38,17 @@ describe('GET /posts', () => {
             });
     });
 });
+
+describe('DELETE /posts', () => {
+    it('should delete a post by id', (done) => {
+        request
+            .delete('/posts/1')
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .end((err, res) => {
+                console.log(res.body);
+                expect(res.body).to.deep.equal([]);
+                done(err);
+            });
+    });
+});
