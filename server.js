@@ -1,8 +1,21 @@
 const express = require('express');
 const PORT = process.env.PORT || 8000;
+const morgan = require('morgan');
+const bodyParser = require('body-parser');
 
 const server = express();
 const knex = require('./db/knex');
+
+server.use(
+    morgan('common', {
+        skip: function(req, res) {
+            return process.env.NODE_ENV === 'test';
+        }
+    })
+);
+server.use(bodyParser.urlencoded({ extended: true }));
+server.use(bodyParser.json());
+server.disable('x-powered-by');
 
 server.use(function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -38,6 +51,16 @@ server.get('/posts/:id', (req, res, next) => {
         .catch(next);
 });
 
+server.post('/posts', (req, res, next) => {
+    const post = knex('posts')
+        .returning('*')
+        .insert(req.body)
+        .then((data) => {
+            res.status(201).json({ inserted: data });
+        })
+        .catch(next);
+});
+
 server.delete('/posts/:id', (req, res, next) => {
     const post = knex('posts')
         .del('id', req.params.id)
@@ -50,9 +73,7 @@ server.delete('/posts/:id', (req, res, next) => {
                 res.json({ message: `Deleted ${data[0]} row(s)` });
             }
         })
-        .catch((err) => {
-            next(err);
-        });
+        .catch(next);
 });
 
 server.use('/', (req, res) => {

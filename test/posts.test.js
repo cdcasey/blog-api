@@ -65,6 +65,24 @@ describe('GET /posts/:id', () => {
     });
 });
 
+describe('POST /posts', () => {
+    it('should create a new post', (done) => {
+        request
+            .post('/posts')
+            .send({
+                title: 'second post',
+                categories: 'category',
+                content: 'some content'
+            })
+            .expect(201)
+            .end((err, res) => {
+                expect(res.text).to.include('"title":"second post"');
+                // expect(res.body.inserted[0].title).to.equal('second post');
+                done(err);
+            });
+    });
+});
+
 describe('DELETE /posts/:id', () => {
     it('should delete a post by id', (done) => {
         request
