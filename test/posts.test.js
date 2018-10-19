@@ -90,19 +90,19 @@ describe('DELETE /posts/:id', () => {
             .expect('Content-Type', /json/)
             .expect(200)
             .end((err, res) => {
-                expect(res.body).to.deep.equal({ message: 'Deleted 1 row(s)' });
+                expect(res.body).to.deep.equal({ message: 'Deleted 1 row' });
                 done(err);
             });
     });
 
     it('should return an error if the post does not exist', (done) => {
         request
-            .delete('/posts/2')
+            .delete('/posts/1')
             .expect('Content-Type', /json/)
             .expect(404)
             .end((err, res) => {
                 expect(res.body).to.deep.equal({
-                    message: 'Post 2 does not exist'
+                    message: 'Post 1 does not exist'
                 });
                 done(err);
             });

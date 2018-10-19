@@ -63,14 +63,15 @@ server.post('/posts', (req, res, next) => {
 
 server.delete('/posts/:id', (req, res, next) => {
     const post = knex('posts')
-        .del('id', req.params.id)
+        .where('id', req.params.id)
+        .del()
         .then((data) => {
-            if (typeof data[0] === 'undefined') {
+            if (data === 1) {
+                res.json({ message: `Deleted 1 row` });
+            } else {
                 res.status(404).json({
                     message: `Post ${req.params.id} does not exist`
                 });
-            } else {
-                res.json({ message: `Deleted ${data[0]} row(s)` });
             }
         })
         .catch(next);
