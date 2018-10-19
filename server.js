@@ -4,7 +4,6 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 
 const server = express();
-const knex = require('./db/knex');
 
 server.use(
     morgan('common', {
@@ -27,56 +26,9 @@ server.use(function(req, res, next) {
     next();
 });
 
-server.get('/posts', (req, res, next) => {
-    const posts = knex('posts')
-        .orderBy('id')
-        .then((posts) => {
-            res.json(posts);
-        })
-        .catch(next);
-});
+const posts = require('./routes/posts');
 
-server.get('/posts/:id', (req, res, next) => {
-    const post = knex('posts')
-        .where('id', req.params.id)
-        .first()
-        .then((post) => {
-            if (typeof post === 'undefined') {
-                res.status(404).json({
-                    message: `Post ${req.params.id} does not exist`
-                });
-            } else {
-                res.json(post);
-            }
-        })
-        .catch(next);
-});
-
-server.post('/posts', (req, res, next) => {
-    const post = knex('posts')
-        .returning('*')
-        .insert(req.body)
-        .then((data) => {
-            res.status(201).json({ inserted: data });
-        })
-        .catch(next);
-});
-
-server.delete('/posts/:id', (req, res, next) => {
-    const post = knex('posts')
-        .where('id', req.params.id)
-        .del()
-        .then((data) => {
-            if (data === 1) {
-                res.json({ message: `Deleted 1 row` });
-            } else {
-                res.status(404).json({
-                    message: `Post ${req.params.id} does not exist`
-                });
-            }
-        })
-        .catch(next);
-});
+server.use('/posts', posts);
 
 server.use('/', (req, res) => {
     res.json({ message: 'hello world' });
