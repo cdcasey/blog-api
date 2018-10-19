@@ -39,6 +39,32 @@ describe('GET /posts', () => {
     });
 });
 
+describe('GET /posts/:id', () => {
+    it('should get a post by id', (done) => {
+        request
+            .get('/posts/1')
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .end((err, res) => {
+                expect(res.text).to.include('"title":"post title"');
+                done(err);
+            });
+    });
+
+    it('should return an error if the post does not exist', (done) => {
+        request
+            .get('/posts/2')
+            .expect('Content-Type', /json/)
+            .expect(404)
+            .end((err, res) => {
+                expect(res.body).to.deep.equal({
+                    message: 'Post 2 does not exist'
+                });
+                done(err);
+            });
+    });
+});
+
 describe('DELETE /posts/:id', () => {
     it('should delete a post by id', (done) => {
         request
@@ -47,6 +73,19 @@ describe('DELETE /posts/:id', () => {
             .expect(200)
             .end((err, res) => {
                 expect(res.body).to.deep.equal({ message: 'Deleted 1 row(s)' });
+                done(err);
+            });
+    });
+
+    it('should return an error if the post does not exist', (done) => {
+        request
+            .delete('/posts/2')
+            .expect('Content-Type', /json/)
+            .expect(404)
+            .end((err, res) => {
+                expect(res.body).to.deep.equal({
+                    message: 'Post 2 does not exist'
+                });
                 done(err);
             });
     });
