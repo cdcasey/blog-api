@@ -39,7 +39,7 @@ describe('GET /posts', () => {
     });
 });
 
-describe('DELETE /posts', () => {
+describe('DELETE /posts/:id', () => {
     it('should delete a post by id', (done) => {
         request
             .delete('/posts/1')
