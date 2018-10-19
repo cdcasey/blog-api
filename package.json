@@ -4,7 +4,8 @@
     "description": "",
     "main": "server.js",
     "scripts": {
-        "test": "export NODE_ENV='test' && nyc ./node_modules/.bin/mocha -t 5000 --exit"
+        "test": "export NODE_ENV='test' && nyc ./node_modules/.bin/mocha -t 5000 --exit",
+        "refresh": "./db/refresh.sh"
     },
     "repository": {
         "type": "git",
