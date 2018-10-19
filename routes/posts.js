@@ -2,10 +2,12 @@ const express = require('express');
 const router = express.Router();
 
 const knex = require('../db/knex');
+const postsModel = require('../models/posts');
+const postsDB = new postsModel('posts');
 
 router.get('/', (req, res, next) => {
-    const posts = knex('posts')
-        .orderBy('id')
+    postsDB
+        .all()
         .then((posts) => {
             res.json(posts);
         })
@@ -13,9 +15,8 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/:id', (req, res, next) => {
-    const post = knex('posts')
-        .where('id', req.params.id)
-        .first()
+    postsDB
+        .getById(req.params.id)
         .then((post) => {
             if (typeof post === 'undefined') {
                 res.status(404).json({
@@ -29,9 +30,8 @@ router.get('/:id', (req, res, next) => {
 });
 
 router.post('', (req, res, next) => {
-    const post = knex('posts')
-        .returning('*')
-        .insert(req.body)
+    postsDB
+        .create(req.body)
         .then((data) => {
             res.status(201).json({ inserted: data });
         })
@@ -39,9 +39,8 @@ router.post('', (req, res, next) => {
 });
 
 router.delete('/:id', (req, res, next) => {
-    const post = knex('posts')
-        .where('id', req.params.id)
-        .del()
+    postsDB
+        .delete(req.params.id)
         .then((data) => {
             if (data === 1) {
                 res.json({ message: `Deleted 1 row` });
