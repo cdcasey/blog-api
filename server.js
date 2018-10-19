@@ -28,9 +28,11 @@ server.use(function(req, res, next) {
 
 const posts = require('./routes/posts');
 const users = require('./routes/users');
+const auth = require('./routes/auth');
 
 server.use('/posts', posts);
 server.use('/users', users);
+server.use('/auth', auth);
 
 /*
 server.use('/', (req, res) => {
