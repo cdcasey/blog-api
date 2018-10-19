@@ -22,6 +22,15 @@ server.get('/posts', (req, res, next) => {
         .catch(next);
 });
 
+server.delete('/posts/:id', (req, res, next) => {
+    const post = knex('posts')
+        .del('id', req.params.id)
+        .then((data) => {
+            res.json({ message: `Deleted ${data[0]} row(s)` });
+        })
+        .catch(next);
+});
+
 server.use('/', (req, res) => {
     res.json({ message: 'hello world' });
 });

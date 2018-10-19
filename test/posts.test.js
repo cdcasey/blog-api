@@ -46,8 +46,7 @@ describe('DELETE /posts', () => {
             .expect('Content-Type', /json/)
             .expect(200)
             .end((err, res) => {
-                console.log(res.body);
-                expect(res.body).to.deep.equal([]);
+                expect(res.body).to.deep.equal({ message: 'Deleted 1 row(s)' });
                 done(err);
             });
     });
