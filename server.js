@@ -27,12 +27,16 @@ server.use(function(req, res, next) {
 });
 
 const posts = require('./routes/posts');
+const users = require('./routes/users');
 
 server.use('/posts', posts);
+server.use('/users', users);
 
+/*
 server.use('/', (req, res) => {
     res.json({ message: 'hello world' });
 });
+*/
 
 server.use((req, res) => {
     res.status(404).send('Not Found');
