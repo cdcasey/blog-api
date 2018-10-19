@@ -2,6 +2,7 @@ const express = require('express');
 const PORT = process.env.PORT || 8000;
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 const server = express();
 
@@ -12,6 +13,8 @@ server.use(
         }
     })
 );
+
+server.use(cookieParser());
 server.use(bodyParser.urlencoded({ extended: true }));
 server.use(bodyParser.json());
 server.disable('x-powered-by');
