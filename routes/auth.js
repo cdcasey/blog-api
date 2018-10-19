@@ -22,7 +22,7 @@ router.post('/', (req, res, next) => {
                 .then((success) => {
                     if (success) {
                         jwt.sign({ id: user.id }, 'secretkey', (err, token) => {
-                            res.cookie('suid', token);
+                            res.cookie('suid', token, { httpOnly: true });
                             res.json({
                                 token
                             });
