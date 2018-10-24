@@ -1,5 +1,6 @@
 'use strict';
 
+const SECRET = process.env.SECRET || 'secretkey';
 const express = require('express');
 const router = express.Router({ mergeParams: true });
 const bcrypt = require('bcrypt');
@@ -21,7 +22,7 @@ router.post('/', (req, res, next) => {
                 .compare(req.body.password, user.password)
                 .then((success) => {
                     if (success) {
-                        jwt.sign({ id: user.id }, 'secretkey', (err, token) => {
+                        jwt.sign({ id: user.id }, SECRET, (err, token) => {
                             res.cookie('suid', token, { httpOnly: true });
                             res.json({
                                 token

@@ -3,6 +3,7 @@ const PORT = process.env.PORT || 8000;
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const verifyToken = require('./middleware/verify');
 
 const server = express();
 
@@ -33,7 +34,7 @@ const posts = require('./routes/posts');
 const users = require('./routes/users');
 const auth = require('./routes/auth');
 
-server.use('/posts', posts);
+server.use('/posts', verifyToken, posts);
 server.use('/users', users);
 server.use('/auth', auth);
 

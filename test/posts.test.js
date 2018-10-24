@@ -5,10 +5,14 @@ process.env.NODE_ENV = 'test';
 const server = require('../server');
 const request = require('supertest')(server);
 const expect = require('chai').expect;
+const jwt = require('jsonwebtoken');
 
 const knex = require('../db/knex');
 
+let token;
+
 before((done) => {
+    token = jwt.sign({ id: 1 }, 'secretkey');
     knex.migrate.rollback().then(() => {
         knex.migrate.latest().then(() => {
             return knex.seed
@@ -30,6 +34,7 @@ describe('GET /posts', () => {
     it('should return a list of posts', (done) => {
         request
             .get('/posts')
+            .set('Authorization', `Bearer ${token}`)
             .expect('Content-Type', /json/)
             .expect(200)
             .end((err, res) => {
@@ -43,6 +48,7 @@ describe('GET /posts/:id', () => {
     it('should get a post by id', (done) => {
         request
             .get('/posts/1')
+            .set('Authorization', `Bearer ${token}`)
             .expect('Content-Type', /json/)
             .expect(200)
             .end((err, res) => {
@@ -54,6 +60,7 @@ describe('GET /posts/:id', () => {
     it('should return an error if the post does not exist', (done) => {
         request
             .get('/posts/2')
+            .set('Authorization', `Bearer ${token}`)
             .expect('Content-Type', /json/)
             .expect(404)
             .end((err, res) => {
@@ -69,6 +76,7 @@ describe('POST /posts', () => {
     it('should create a new post', (done) => {
         request
             .post('/posts')
+            .set('Authorization', `Bearer ${token}`)
             .send({
                 title: 'second post',
                 categories: 'category',
@@ -87,6 +95,7 @@ describe('DELETE /posts/:id', () => {
     it('should delete a post by id', (done) => {
         request
             .delete('/posts/1')
+            .set('Authorization', `Bearer ${token}`)
             .expect('Content-Type', /json/)
             .expect(200)
             .end((err, res) => {
@@ -98,6 +107,7 @@ describe('DELETE /posts/:id', () => {
     it('should return an error if the post does not exist', (done) => {
         request
             .delete('/posts/1')
+            .set('Authorization', `Bearer ${token}`)
             .expect('Content-Type', /json/)
             .expect(404)
             .end((err, res) => {
