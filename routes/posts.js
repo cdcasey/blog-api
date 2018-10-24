@@ -20,9 +20,8 @@ router.get('/:id', (req, res, next) => {
         .getById(req.params.id)
         .then((post) => {
             if (typeof post === 'undefined') {
-                res.status(404).json({
-                    message: `Post ${req.params.id} does not exist`
-                });
+                res.message = `Post ${req.params.id} does not exist`;
+                next();
             } else {
                 res.json(post);
             }
@@ -46,9 +45,8 @@ router.delete('/:id', (req, res, next) => {
             if (data === 1) {
                 res.json({ message: `Deleted 1 row` });
             } else {
-                res.status(404).json({
-                    message: `Post ${req.params.id} does not exist`
-                });
+                res.message = `Post ${req.params.id} does not exist`;
+                next();
             }
         })
         .catch(next);

@@ -44,13 +44,15 @@ server.use('/', (req, res) => {
 });
 */
 
+// Catch any non-defined routes
 server.use((req, res) => {
-    res.status(404).send('Not Found');
+    res.status(404).json({ message: res.message || 'Not Found' });
 });
 
+// Some error handling
 server.use((err, req, res, next) => {
     console.error(err.stack);
-    res.status(500).send('Internal Server Error');
+    res.status(500).json({ message: 'Internal Server Error' });
 });
 
 server.listen(PORT, () => {
