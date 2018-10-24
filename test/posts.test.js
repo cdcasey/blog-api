@@ -31,6 +31,17 @@ after((done) => {
         .catch((err) => done(err));
 });
 
+describe('GET /post', () => {
+    it('should return 404', (done) => {
+        request
+            .get('/post')
+            .expect(404)
+            .end((err, res) => {
+                done(err);
+            });
+    });
+});
+
 describe('GET /posts', () => {
     it('should return a list of posts', (done) => {
         request
