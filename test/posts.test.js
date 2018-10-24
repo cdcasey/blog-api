@@ -9,10 +9,11 @@ const jwt = require('jsonwebtoken');
 
 const knex = require('../db/knex');
 
-let token;
+let token, badToken;
 
 before((done) => {
     token = jwt.sign({ id: 1 }, 'secretkey');
+    badToken = jwt.sign({ id: 1 }, 'NOTsecretkey');
     knex.migrate.rollback().then(() => {
         knex.migrate.latest().then(() => {
             return knex.seed
@@ -39,6 +40,29 @@ describe('GET /posts', () => {
             .expect(200)
             .end((err, res) => {
                 expect(res.text).to.include('"title":"post title"');
+                done(err);
+            });
+    });
+
+    it('should fail with a bad token', (done) => {
+        request
+            .get('/posts')
+            .set('Authorization', `Bearer ${badToken}`)
+            .expect('Content-Type', /json/)
+            .expect(403)
+            .end((err, res) => {
+                expect(res.text).to.equal('{"message":"Invalid token"}');
+                done(err);
+            });
+    });
+
+    it('should fail with no token', (done) => {
+        request
+            .get('/posts')
+            .expect('Content-Type', /json/)
+            .expect(403)
+            .end((err, res) => {
+                expect(res.text).to.equal('{"message":"please log in"}');
                 done(err);
             });
     });
