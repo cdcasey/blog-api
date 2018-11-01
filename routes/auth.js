@@ -14,9 +14,17 @@ const userDB = new userModel('users');
 // });
 
 router.post('/', (req, res, next) => {
-    userDB.getByEmail(req.body.email).then((user) => {
+    let authMethod, error;
+    if (req.body.email) {
+        authMethod = userDB.getByEmail(req.body.email);
+        error = 'Email not found';
+    } else {
+        authMethod = userDB.getByUsername(req.body.username);
+        error = 'User not found';
+    }
+    authMethod.then((user) => {
         if (!user) {
-            res.status(400).send({ message: 'Email not found' });
+            res.status(400).send({ message: error });
         } else {
             bcrypt
                 .compare(req.body.password, user.password)
