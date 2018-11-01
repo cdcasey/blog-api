@@ -21,7 +21,12 @@ server.use(bodyParser.json());
 server.disable('x-powered-by');
 
 server.use(function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
+    if (req.method === 'OPTIONS') {
+        res.header('Access-Control-Allow-Origin', req.headers.origin);
+    } else {
+        res.header('Access-Control-Allow-Origin', '*');
+    }
+    // res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, DELETE');
     res.header(
         'Access-Control-Allow-Headers',
