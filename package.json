@@ -21,7 +21,7 @@
         "bcrypt": "^3.0.2",
         "cookie-parser": "^1.4.3",
         "express": "^4.16.4",
-        "jsonwebtoken": "^8.3.0",
+        "jsonwebtoken": "^9.0.0",
         "knex": "^0.15.2",
         "pg": "^7.6.0"
     },
